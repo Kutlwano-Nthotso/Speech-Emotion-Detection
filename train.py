@@ -95,7 +95,13 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-model = SVC(kernel="rbf", C=50, gamma=0.0005)
+from sklearn.ensemble import RandomForestClassifier
+
+model = RandomForestClassifier(
+    n_estimators=200,
+    random_state=42,
+    max_depth=None
+)
 
 model.fit(X_train, y_train)
 
@@ -108,3 +114,19 @@ y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 
 print("Accuracy:", accuracy)
+
+from sklearn.metrics import confusion_matrix, classification_report
+
+cm = confusion_matrix(y_test, y_pred)
+print("\nConfusion Matrix:")
+print(cm)
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+import joblib
+
+joblib.dump(model, "emotion_model.pkl")
+joblib.dump(scaler, "scaler.pkl")
+
+print("Model saved successfully!")
